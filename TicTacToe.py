@@ -75,9 +75,11 @@ class TicTacToe:
 
     # Testing different ways for computer decisions
     # TODO minimax
-    def minimax(self, board, depth, isMax):
+    def minimax(self, depth, isMax):
         # Base case
-        if self.is_player_win(self.ai):
+        if self.draw_check() :
+            return 0
+        elif self.is_player_win(self.ai):
             return 1 # win AI
         elif self.is_player_win(self.human):
             return -1 # lost AI
@@ -88,7 +90,7 @@ class TicTacToe:
                 for j in range(3):
                     if self.board[i][j] == '-':
                         self.set_board(i, j, self.ai)
-                        score = self.minimax(self.board, depth + 1, False)
+                        score = self.minimax(depth + 1, False)
                         self.set_board(i, j, '-')
                         bestScore = max(score, bestScore)
             return bestScore   
@@ -98,29 +100,19 @@ class TicTacToe:
                 for j in range(3):
                     if self.board[i][j] == '-':
                         self.set_board(i, j, self.human)
-                        score = self.minimax(self.board, depth + 1, True)
+                        score = self.minimax(depth + 1, True)
                         self.set_board(i, j, '-')
                         bestScore = min(score, bestScore)
-        
             return bestScore
 
-
-    # TODO expectimax
-    def expectimax(self, board):
-        return 1
-
-    # TODO Alpha Beta Pruning
-    def alpha_beta_pruning(self, board):
-        return 1
-
-    def bestMove(self, f, player): # f is the decision making function (minimax, expectimax, alpha_beta_pruning)
+    def bestMove(self, f, player): # f is the decision making function (minimax, expectimax)
         bestScore = -float('inf')
         move = (-1, -1, player)
         for i in range(3):
             for j in range(3):
                 if self.board[i][j] == '-':
                     self.set_board(i,j,player)
-                    score = f(self.board, 0, True)
+                    score = f(0, False)
                     # Undo your move
                     self.set_board(i,j,'-')
                     if (score > bestScore):
@@ -128,11 +120,10 @@ class TicTacToe:
                         move = (i , j, player)
         self.set_board(*move)
 
-
     def start(self):
         self.create_board()
 
-        player = 'X'
+        player = 'O'
         while True:
             print(f"Player {player} turn")
 
