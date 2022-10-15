@@ -46,10 +46,7 @@ class TicTacToe:
         self.board = [['-', '-', '-'], ['-', '-', '-'], ['-', '-', '-']]
         self.ai = 'O'
         self.human = 'X'
-        self.moves = {1 : [0, 0], 2 : [0, 1], 3 : [0, 2],
-                      4 : [1, 0], 5 : [1, 1], 6 : [1, 2],
-                      7 : [2, 0], 8 : [2, 1], 9 : [2, 2]     
-                    }
+        self.moves = 0
 
     def quit_menus(self):
         self.menu.quit()
@@ -83,6 +80,7 @@ class TicTacToe:
 
     def restart_game(self) :
         self.board = [['-', '-', '-'], ['-', '-', '-'], ['-', '-', '-']]
+        self.moves = 0
         if self.button_list:
             for i in range(3):
                 for j in range(3):
@@ -92,6 +90,7 @@ class TicTacToe:
 
     def back(self):
         self.board = [['-', '-', '-'], ['-', '-', '-'], ['-', '-', '-']]
+        self.moves = 0
         for i in range(3):
             for j in range(3):
                 self.button_list[i][j].destroy()
@@ -107,31 +106,32 @@ class TicTacToe:
         self.set_board(i, j, self.human)
         self.button_list[i][j].config(text = 'X')
         self.button_list[i][j].config(state='disable')
+        self.moves += 1
 
+        #checking if the player won
         if self.is_player_win(self.human):
             box = messagebox.showinfo("Winner", "Player won the match")
             self.disable_buttons()
-            return
 
-            # Checking for a draw
+        # Checking for a draw
         elif self.draw_check():
             box = messagebox.showinfo("Tie Game", "Tie Game")
-            return
+            
+        if self.moves < 8:
+            (x, y) = self.bestMove(self.AlphaBetaPruning, self.ai)
+            self.button_list[x][y].config(text = 'O')
+            self.button_list[x][y].config(state='disable')   
 
-        (x, y) = self.bestMove(self.AlphaBetaPruning, self.ai)
-        self.button_list[x][y].config(text = 'O')
-        self.button_list[x][y].config(state='disable')   
+            #checking if the ai won
+            if self.is_player_win(self.ai):
+                box = messagebox.showinfo("Winner", "Computer won the match")
+                self.disable_buttons()
 
-        if self.is_player_win(self.ai):
-            box = messagebox.showinfo("Winner", "Computer won the match")
-            self.disable_buttons()
-            return
+            elif self.draw_check():
+                box = messagebox.showinfo("Tie Game", "Tie Game")
 
-            # Checking for a draw
-        elif self.draw_check():
-            box = messagebox.showinfo("Tie Game", "Tie Game")
-            return
-     
+            self.moves += 1
+
     ##########################################
 
     def create_board(self):
@@ -274,7 +274,7 @@ class TicTacToe:
                         move = (i , j, player)
         self.set_board(*move)
 
-    def bestMove(self, f, player): # f is the decision making function (minimax, expectimax)
+    def bestMove(self, f, player): 
         bestScore = -1000
         x = -1
         y = -1
