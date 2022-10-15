@@ -1,6 +1,6 @@
-# Charbel Farah : 201868
-# Elie Moutran: 200250
-# Emmanuel AbdelNour : 
+# Charbel Farah
+# Elie Moutran
+# Emmanuel AbdelNour 
 
 import random
 import tkinter
@@ -111,10 +111,12 @@ class TicTacToe:
         if self.is_player_win(self.human):
             box = messagebox.showinfo("Winner", "Player won the match")
             self.disable_buttons()
+            return
 
             # Checking for a draw
-        if self.draw_check():
+        elif self.draw_check():
             box = messagebox.showinfo("Tie Game", "Tie Game")
+            return
 
         (x, y) = self.bestMove(self.AlphaBetaPruning, self.ai)
         self.button_list[x][y].config(text = 'O')
@@ -123,10 +125,12 @@ class TicTacToe:
         if self.is_player_win(self.ai):
             box = messagebox.showinfo("Winner", "Computer won the match")
             self.disable_buttons()
+            return
 
             # Checking for a draw
-        if self.draw_check():
+        elif self.draw_check():
             box = messagebox.showinfo("Tie Game", "Tie Game")
+            return
      
     ##########################################
 
