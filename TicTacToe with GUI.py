@@ -291,8 +291,6 @@ class TicTacToe:
         return (x , y)
 
     def start(self):
-        self.create_board()
-
         self.head.pack(side='top')
         self.B1.pack(side='top')
         self.B2.pack(side='top')
