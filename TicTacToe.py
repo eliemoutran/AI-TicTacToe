@@ -79,7 +79,7 @@ class TicTacToe:
 
     # Testing different ways for computer decisions
     # TODO minimax
-    def minimax(self, depth, isMax):
+    def minimax(self, depth, isMax): # if isMax I'm on the max node else on the min node
         # Base case
         if self.is_player_win(self.ai):
             return 10 - depth # win AI
@@ -89,7 +89,7 @@ class TicTacToe:
             return 0
         
         if isMax:
-            bestScore = -1000
+            bestScore = -float('inf')
             for i in range(3):
                 for j in range(3):
                     if self.board[i][j] == '-':
@@ -99,7 +99,7 @@ class TicTacToe:
                         bestScore = max(score, bestScore)
             return bestScore   
         else:
-            bestScore = 1000
+            bestScore = float('inf')
             for i in range(3):
                 for j in range(3):
                     if self.board[i][j] == '-':
@@ -118,7 +118,7 @@ class TicTacToe:
             return 0
 
         if isMax:
-            BestScore= -1000   
+            BestScore= -float('inf')   
             for i in range(3):
                 for j in range(3):
                     if self.board[i][j] == '-':
@@ -131,7 +131,7 @@ class TicTacToe:
                             break
             return alpha
         else:
-            BestScore = 1000
+            BestScore = float('inf')
             for i in range(3):
                 for j in range(3):
                     if self.board[i][j] == '-':
@@ -144,14 +144,14 @@ class TicTacToe:
                             break
             return beta
 
-    def bestMove2(self, f, player): # f is the decision making function (minimax, expectimax)
-        bestScore = -1000
+    def bestMoveMM(self, player):
+        bestScore = -float('inf')
         move = (-1, -1, player)
         for i in range(3):
             for j in range(3):
                 if self.board[i][j] == '-':
                     self.set_board(i,j,player)
-                    score = f(0, False)
+                    score = self.minimax(0, False)
                     # Undo your move
                     self.set_board(i,j,'-')
                     if (score > bestScore):
@@ -159,14 +159,14 @@ class TicTacToe:
                         move = (i , j, player)
         self.set_board(*move)
 
-    def bestMove(self, f, player): # f is the decision making function (minimax, expectimax)
-        bestScore = -1000
+    def bestMoveAB(self, player): 
+        bestScore = -float('inf')
         move = (-1, -1, player)
         for i in range(3):
             for j in range(3):
                 if self.board[i][j] == '-':
                     self.set_board(i,j,player)
-                    score = f(0, False, -1000, 1000)
+                    score = self.AlphaBetaPruning(0, False, -float('inf'), float('inf'))
                     # Undo your move
                     self.set_board(i,j,'-')
                     if (score > bestScore):
@@ -201,7 +201,7 @@ class TicTacToe:
                 self.set_board(row, col, player)
             else:
                 print()
-                self.bestMove(self.AlphaBetaPruning, player)
+                self.bestMoveAB(player)
 
             # checking whether current player is won or not
             if self.is_player_win(player):
