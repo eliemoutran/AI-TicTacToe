@@ -40,9 +40,10 @@ class TicTacToe:
         self.l1 = Button(self.menu_play, text="Player : X", width=10)
         self.l2 = Button(self.menu_play, text="Computer : O", width=10, state=DISABLED)
         self.r = Button(self.menu_play, text="Restart Game", width = 10, command = self.restart_game)
-        self.e = Button(self.menu_play, text = "Main Menu", width = 10, command = self.back)
+        self.m = Button(self.menu_play, text = "Main Menu", width = 10, command = self.back)
+        self.e = Button(self.menu_play, text = "Exit", width = 10, command = self.quit_menus)
 
-        self.board = []
+        self.board = [['-', '-', '-'], ['-', '-', '-'], ['-', '-', '-']]
         self.ai = 'O'
         self.human = 'X'
         self.moves = {1 : [0, 0], 2 : [0, 1], 3 : [0, 2],
@@ -57,7 +58,7 @@ class TicTacToe:
     def gameboard_pc(self):
         self.button_list = []
         for i in range(3):
-            m = 5 + i
+            m = 6 + i
             self.button_list.append([])
             for j in range(3):
                 n = j
@@ -76,18 +77,21 @@ class TicTacToe:
         self.l1.grid(row=1, column=1)
         self.l2.grid(row=2, column=1)
         self.r.grid(row =3, column=1)
-        self.e.grid(row=4, column=1)
+        self.m.grid(row=4, column=1)
+        self.e.grid(row=5, column=1)
         self.gameboard_pc()
 
     def restart_game(self) :
-        self.board = self.create_board()
-        for i in range(3):
-            for j in range(3):
-                self.button_list[i][j].destroy()
+        self.board = [['-', '-', '-'], ['-', '-', '-'], ['-', '-', '-']]
+        if self.button_list:
+            for i in range(3):
+                for j in range(3):
+                    self.button_list[i][j].destroy()
+        self.button_list = []
         self.gameboard_pc()
 
     def back(self):
-        self.board = self.create_board()
+        self.board = [['-', '-', '-'], ['-', '-', '-'], ['-', '-', '-']]
         for i in range(3):
             for j in range(3):
                 self.button_list[i][j].destroy()
